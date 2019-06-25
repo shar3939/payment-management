@@ -6,6 +6,7 @@ package com.payments.controller;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class PaymentsController {
 	@Autowired
 	PaymentsForexFeign paymentsForexClient;
 	
+	@CrossOrigin
 	@PostMapping(path = "/transfer")
 	public boolean transfer(@RequestBody AccountTrx accountTrx) {
 		
@@ -35,7 +37,7 @@ public class PaymentsController {
 		AccountTrx benificiaryAccnt = paymentsClient.getAccountDtls(accountTrx.getToAccountID()); 
 		AccountTrx fromAccnt = paymentsClient.getAccountDtls(accountTrx.getAccountId());
 		
-		if("".equals(accountTrx.getToCurrency()) || accountTrx.getToCurrency()==null) 
+		if("".equals(accountTrx.getToCurrency())) 
 			accountTrx.setCurrency("INR");
 		else 
 			accountTrx.setToCurrency("INR");
@@ -60,7 +62,7 @@ public class PaymentsController {
 			
 		}
 		
-		return false; 
+		return true; 
 	}
 
 	private void transferInINR(AccountTrx accountTrx, AccountTrx benificiaryAccnt, AccountTrx fromAccnt) {
